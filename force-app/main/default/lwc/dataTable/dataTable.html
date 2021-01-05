@@ -1,6 +1,7 @@
 <template>
     <lightning-card title="Case List" icon-name="custom:custom63">
         <div class="slds-m-around_medium" style="width:auto">
+            <c-filter-combobox></c-filter-combobox>
             <template if:true={contact.data}>
                 <lightning-datatable
                     key-field="Id"

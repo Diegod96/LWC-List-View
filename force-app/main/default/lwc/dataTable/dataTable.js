@@ -24,7 +24,7 @@ const columns = [
     {label: 'Contact Email', fieldName: 'ContactEmail', type: 'email', editable: true},
 ]
 
-export default class RefreshLWC extends LightningElement {
+export default class DataTable extends LightningElement {
 
     // Initialize variables
     columns = columns;
