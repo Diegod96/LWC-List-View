@@ -1,0 +1,15 @@
+<template>
+    <lightning-card title="Case List" icon-name="custom:custom63">
+        <div class="slds-m-around_medium" style="width:auto">
+            <template if:true={contact.data}>
+                <lightning-datatable
+                    key-field="Id"
+                    data={cases}
+                    columns={columns}
+                    onsave={handleSave}
+                    draft-values={draftValues}
+                ></lightning-datatable>
+            </template>
+        </div>
+    </lightning-card>
+</template>

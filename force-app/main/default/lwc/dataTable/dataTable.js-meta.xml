@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>49.0</apiVersion>
+    <isExposed>true </isExposed>
+    <masterLabel>Refresh Component2</masterLabel>
+    <description>Component that contains the cases datatable along with update and save functionality</description>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightning__AppPage</target>
+    </targets>
+</LightningComponentBundle>
