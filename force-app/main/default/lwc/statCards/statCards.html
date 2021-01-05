@@ -1,0 +1,29 @@
+<template>
+    <lightning-card variant="base">
+        <div class="slds-m-top_medium">
+            <h1 class="slds-page-header__title slds-m-bottom_medium">
+                Case Status Quick View
+            </h1>
+            <span class="slds-badge slds-theme_error">Submitted Cases: {submitted}</span>
+            <span class="slds-badge slds-theme_warning">Active Cases: {active}</span>
+            <span class="slds-badge slds-theme_success">Closed Cases: {closed}</span>
+        </div>
+        <template if:true={error}>
+            {error}
+        </template>
+    </lightning-card>
+    <br>
+    <lightning-card variant="base">
+        <div class="slds-m-top_medium">
+            <h1 class="slds-page-header__title slds-m-bottom_medium">
+                Case Priority Quick View
+            </h1>
+            <span class="slds-badge slds-theme_error">High Priority Cases: {high}</span>
+            <span class="slds-badge slds-theme_warning">Medium Priority Cases: {medium}</span>
+            <span class="slds-badge slds-theme_success">Low Priority Cases: {low}</span>
+        </div>
+        <template if:true={error}>
+            {error}
+        </template>
+    </lightning-card>
+</template>
