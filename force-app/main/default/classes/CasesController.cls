@@ -14,7 +14,7 @@ public with sharing class CasesController {
     @AuraEnabled(cacheable=true)
     public static List <Case> getHighPriorityCases() {
         return [
-            SELECT CaseNumber,Status 
+            SELECT Id, CaseNumber, Priority, Type, Subject, ContactEmail, Status 
             FROM Case 
             WHERE Priority='High'
         ];
@@ -24,7 +24,7 @@ public with sharing class CasesController {
     @AuraEnabled(cacheable=true)
     public static List <Case> getMediumPriorityCases () {
         return [
-            SELECT CaseNumber,Status 
+            SELECT Id, CaseNumber, Priority, Type, Subject, ContactEmail, Status 
             FROM Case 
             WHERE Priority='Medium'
         ];
@@ -34,7 +34,7 @@ public with sharing class CasesController {
     @AuraEnabled(cacheable=true)
     public static List <Case> getLowPriorityCases () {
         return [
-            SELECT CaseNumber,Status 
+            SELECT Id, CaseNumber, Priority, Type, Subject, ContactEmail, Status 
             FROM Case 
             WHERE Priority='Low'
         ];
@@ -44,7 +44,7 @@ public with sharing class CasesController {
     @AuraEnabled(cacheable=true)
     public static List <Case> getClosedCases() {
         return [
-            SELECT CaseNumber,Status 
+            SELECT Id, CaseNumber, Priority, Type, Subject, ContactEmail, Status 
             FROM Case 
             WHERE Status='Closed'
         ];
@@ -54,7 +54,7 @@ public with sharing class CasesController {
     @AuraEnabled(cacheable=true)
     public static List <Case> getActiveCases() {
         return [
-            SELECT CaseNumber,Status 
+            SELECT Id, CaseNumber, Priority, Type, Subject, ContactEmail, Status 
             FROM Case 
             WHERE Status='Active'
         ];
@@ -64,7 +64,7 @@ public with sharing class CasesController {
     @AuraEnabled(cacheable=true)
     public static List <Case> getSubmittedCases() {
         return [
-            SELECT CaseNumber,Status 
+            SELECT Id, CaseNumber, Priority, Type, Subject, ContactEmail, Status
             FROM Case 
             WHERE Status='Submitted'
         ];

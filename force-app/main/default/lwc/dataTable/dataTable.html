@@ -1,16 +1,86 @@
 <template>
-    <lightning-card title="Case List" icon-name="custom:custom63">
-        <div class="slds-m-around_medium" style="width:auto">
-            <c-filter-combobox></c-filter-combobox>
-            <template if:true={contact.data}>
-                <lightning-datatable
-                    key-field="Id"
-                    data={cases}
-                    columns={columns}
-                    onsave={handleSave}
-                    draft-values={draftValues}
-                ></lightning-datatable>
-            </template>
+    <div class="slds-box slds-theme--default">
+        <div class="slds-text-color_inverse slds-text-heading_large" style="padding:0.5rem;background:#16325c">
+            Cases
         </div>
-    </lightning-card>
+        <div style="width:200px; padding:0.5rem;">
+            <lightning-combobox name="filter" label="Status" value={selectedValue} variant="label-hidden"
+                options={options} onchange={handleChange} placeholder="Select Industry to filter"></lightning-combobox>
+        </div>
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <th class="" scope="col">
+                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button"
+                            tabindex="0" onclick={sortRecs} name="Id">
+                            Case Id
+                        </a>
+                    </th>
+                    <th class="" scope="col">
+                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button"
+                            tabindex="0" onclick={sortRecs} name="CaseNumber">
+                            Case Number
+                        </a>
+                    </th>
+                    <th class="" scope="col">
+                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button"
+                            tabindex="0" onclick={sortRecs} name="Priority">
+                            Priority
+                        </a>
+                    </th>
+                    <th class="" scope="col">
+                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button"
+                            tabindex="0" onclick={sortRecs} name="Type">
+                            Type
+                        </a>
+                    </th>
+                    <th class="" scope="col">
+                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button"
+                            tabindex="0" onclick={sortRecs} name="Subject">
+                            Subject
+                        </a>
+                    </th>
+                    <th class="" scope="col">
+                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button"
+                            tabindex="0" onclick={sortRecs} name="ContactEmail">
+                            Contact Email
+                        </a>
+                    </th>
+                    <th class="" scope="col">
+                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button"
+                            tabindex="0" onclick={sortRecs} name="Status">
+                            Status
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <template iterator:it={records}>
+                    <tr class="slds-hint-parent" key={it.value.Id}>
+                        <td data-label="Case Id">
+                            <div class="slds-cell-wrap">{it.value.Id}</div>
+                        </td>
+                        <td data-label="Case Number">
+                            <div class="slds-cell-wrap">{it.value.CaseNumber}</div>
+                        </td>
+                        <td data-label="Priority">
+                            <div class="slds-cell-wrap">{it.value.Priority}</div>
+                        </td>
+                        <td data-label="Type">
+                            <div class="slds-cell-wrap">{it.value.Type}</div>
+                        </td>
+                        <td data-label="Subject">
+                            <div class="slds-cell-wrap">{it.value.Subject}</div>
+                        </td>
+                        <td data-label="Contact Email">
+                            <div class="slds-cell-wrap">{it.value.ContactEmail}</div>
+                        </td>
+                        <td data-label="Status">
+                            <div class="slds-cell-wrap">{it.value.Status}</div>
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    </div>
 </template>

@@ -27,33 +27,116 @@ const columns = [
 export default class DataTable extends LightningElement {
 
     // Initialize variables
+    records;
+    selectedValue = 'All';
+    sortedColumn;
+    sortedDirection;
     columns = columns;
     draftValues = [];
     ALL_CASES = [];
     cases = [];
     contactResult = null;
-    
+
 
     // Wire the getCaseList() method from Apex Controller
-    @wire(getCaseList)
-    contact;
+    // @wire(getCaseList)
+    // contact;
     
-    // Use getCaseList to assign data to cases and ALL_CASES to be used when filtering
-    @track data;
-    @wire(getCaseList)
-    wiredCases({ error, data }) {
-        if (data) {
-            this.ALL_CASES = data;
-            this.cases = data;
-            console.log(this.cases)
-            this.error = undefined;
-        } else if (error) {
-            this.error = error;
-            this.contacts = undefined;
-        }
+    // // Use getCaseList to assign data to cases and ALL_CASES to be used when filtering
+    // @track data;
+    // @wire(getCaseList)
+    // wiredCases({ error, data }) {
+    //     if (data) {
+    //         this.ALL_CASES = data;
+    //         this.cases = data;
+    //         console.log(this.cases)
+    //         this.error = undefined;
+    //     } else if (error) {
+    //         this.error = error;
+    //         this.contacts = undefined;
+    //     }
 
+    // }
+
+        
+    get options() {
+        return [
+            { label: 'All', value: 'All' },
+            { label: 'High', value: 'High' },
+            { label: 'Medium', value: 'Medium' },
+            { label: 'Low', value: 'Low' }
+        ];
     }
 
+    handleChange(event) {
+        this.selectedValue = event.target.value;
+        if (this.selectedValue === 'All') {
+            this.records = this.initialRecords;
+        }
+        else{
+            this.filter();
+        }
+    }
+
+    @wire(getCaseList)
+    wiredCases({error, data}) {
+
+        if(data) {
+            this.records = data;
+            this.initialRecords = data;
+            this.error = undefined;
+        } else if(error) {
+            this.error = error;
+            this.initialRecords = undefined;
+            this.records = undefined;
+        }
+    }
+
+    sortRecs(event) {
+        let colName = event ? event.target.name : undefined;
+        console.log("Column Name is: " + colName);
+
+        if(this.sortedColumn === colName) {
+            this.sortedDirection = (
+                this.sortedDirection === 'asc' ? 'desc' : 'asc'
+            );
+        } else {
+            this.sortedDirection = 'asc';
+        }
+
+        let isReverse = this.sortedDirection === 'asc' ? 1:-1;
+
+        if(colName) {
+            this.sortedColumn = colName;
+        } else {
+            colName = this.sortedColumn;
+        }
+
+        this.records = JSON.parse(JSON.stringify(this.records)).sort((a, b) =>{
+            a = a[ colName ] ? a[ colName ].toLowerCase() : 'z';
+            b = b[ colName ] ? b[ colName ].toLowerCase() : 'z';
+            return a > b ? 1 * isReverse : -1 * isReverse;
+        });
+    }
+
+    filter() {
+        if(this.selectedValue) {
+            this.records = this.initialRecords;
+            if(this.records) {
+                let recs = [];
+                for(let rec of this.records) {
+                    console.log('Rec is: ' + JSON.stringify(rec));
+                    if(rec.Priority === this.selectedValue) {
+                        recs.push(rec);
+                    }
+                }
+                console.log("Recs are: " + JSON.stringify(recs));
+                this.records = recs;
+            }
+        } else {
+            this.records = initialRecords;
+        }
+    }
 
     // Handle save event
     handleSave(event) {
