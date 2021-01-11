@@ -10,6 +10,12 @@ public with sharing class CasesController {
             ];
     }
 
+    @AuraEnabled(cacheable=true)
+    public static Integer getCaseCount(){
+        
+        return [SELECT COUNT() FROM Case];
+    }
+
     // Return High Priority cases
     @AuraEnabled(cacheable=true)
     public static List <Case> getHighPriorityCases() {
