@@ -1,9 +1,7 @@
-import { LightningElement, wire, track } from 'lwc';
-import getCaseList from '@salesforce/apex/CasesController.getCaseList';
+import { LightningElement, track, wire } from 'lwc';
 import { updateRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-//import { refreshApex } from '@salesforce/apex';
-
+import getCaseList from '@salesforce/apex/CasesController.getCaseList';
 
 const columns = [
     {label: 'Id', fieldName: 'Id', editable: false},
@@ -15,70 +13,36 @@ const columns = [
     {label: 'Contact Email', fieldName: 'ContactEmail', type: 'email', editable: true},
 ]
 
-export default class DataTable extends LightningElement {
-
-    // Initialize variables
-    @track records;
-    @track initialRecords;
-    selectedValue = 'All';
+export default class OppTable extends LightningElement {
+    @track error;
+    @track columns = columns;
+    @track opps; //All opportunities available for data table    
+    @track showTable = false; //Used to render table after we get the data from apex controller    
+    @track recordsToDisplay = []; //Records to be displayed on the page
+    @track rowNumberOffset; //Row number
     draftValues = [];
-    columns = columns;
 
-    
     @wire(getCaseList)
-    wiredCases({error, data}) {
-
-        if(data) {
-            this.records = data;
-            this.initialRecords = data;
-            this.error = undefined;
-        } else if(error) {
-            this.error = error;
-            this.initialRecords = undefined;
-            this.records = undefined;
-        }
-    }
-
-        
-    get options() {
-        return [
-            { label: 'All', value: 'All' },
-            { label: 'High', value: 'High' },
-            { label: 'Medium', value: 'Medium' },
-            { label: 'Low', value: 'Low' }
-        ];
-    }
-
-    
-    // Handles change of combobox values
-    handleChange(event) {
-        this.selectedValue = event.target.value;
-        if (this.selectedValue === 'All') {
-            this.records = this.initialRecords;
-        }
-        else{
-            this.filter();
-        }
-    }
-
-    // Filters records based on the selectedValue in the combobox
-    filter() {
-        if(this.selectedValue) {
-            this.records = this.initialRecords;
-            if(this.records) {
-                let recs = [];
-                for(let rec of this.records) {
-                    console.log('Rec is: ' + JSON.stringify(rec));
-                    if(rec.Priority === this.selectedValue) {
-                        recs.push(rec);
-                    }
-                }
-                console.log("Recs are: " + JSON.stringify(recs));
-                this.records = recs;
+    wopps({error,data}){
+        if(data){
+            let recs = [];
+            for(let i=0; i<data.length; i++){
+                let opp = {};
+                opp.rowNumber = ''+(i+1);
+                opp.oppLink = '/'+data[i].Id;
+                opp = Object.assign(opp, data[i]);
+                recs.push(opp);
             }
-        } else {
-            this.records = initialRecords;
-        }
+            this.opps = recs;
+            this.showTable = true;
+        }else{
+            this.error = error;
+        }       
+    }
+    //Capture the event fired from the paginator component
+    handlePaginatorChange(event){
+        this.recordsToDisplay = event.detail;
+        this.rowNumberOffset = this.recordsToDisplay[0].rowNumber-1;
     }
 
     // Handle save event

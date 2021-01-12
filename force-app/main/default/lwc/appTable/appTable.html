@@ -1,0 +1,20 @@
+<template>
+    <lightning-card title="Data Table with Pagination">
+        <template if:true={showTable}>
+            <c-paginator records={opps} 
+                        total-records={opps.length} 
+                        show-search-box="true" 
+                        onpaginatorchange={handlePaginatorChange}>
+            </c-paginator>
+            <lightning-datatable key-field="Id" 
+                                data={recordsToDisplay} 
+                                columns={columns}
+                                hide-checkbox-column
+                                show-row-number-column
+                                row-number-offset={rowNumberOffset}
+                                onsave={handleSave}
+                                draft-values={draftValues}>
+            </lightning-datatable>
+        </template>
+    </lightning-card>
+</template>
