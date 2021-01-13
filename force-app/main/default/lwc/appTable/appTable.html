@@ -1,17 +1,17 @@
 <template>
-    <lightning-card title="Data Table with Pagination">
+    <lightning-card title="Custom List View Cases Datatable">
         <template if:true={showTable}>
             <c-paginator records={opps} 
                         total-records={opps.length} 
                         show-search-box="true" 
                         onpaginatorchange={handlePaginatorChange}>
             </c-paginator>
+            <lightning-button slot="actions" label="Delete Account" onclick={deleteRecord}></lightning-button>
             <lightning-datatable key-field="Id" 
                                 data={recordsToDisplay} 
                                 columns={columns}
-                                hide-checkbox-column
-                                show-row-number-column
                                 row-number-offset={rowNumberOffset}
+                                onrowselection={handleSelection}
                                 onsave={handleSave}
                                 draft-values={draftValues}>
             </lightning-datatable>

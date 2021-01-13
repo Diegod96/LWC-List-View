@@ -1,6 +1,8 @@
-import { LightningElement, track, wire } from 'lwc';
+import { LightningElement, track, api, wire } from 'lwc';
 import { updateRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { deleteRecord } from 'lightning/uiRecordApi';
+import { refreshApex } from '@salesforce/apex';
 import getCaseList from '@salesforce/apex/CasesController.getCaseList';
 
 const columns = [
@@ -14,8 +16,10 @@ const columns = [
 ]
 
 export default class OppTable extends LightningElement {
+    
+    @track selectedRecord; // Selected row record
     @track error;
-    @track columns = columns;
+    @track columns = columns; // Columns for the data table
     @track opps; //All opportunities available for data table    
     @track showTable = false; //Used to render table after we get the data from apex controller    
     @track recordsToDisplay = []; //Records to be displayed on the page
@@ -39,6 +43,7 @@ export default class OppTable extends LightningElement {
             this.error = error;
         }       
     }
+
     //Capture the event fired from the paginator component
     handlePaginatorChange(event){
         this.recordsToDisplay = event.detail;
@@ -64,11 +69,36 @@ export default class OppTable extends LightningElement {
             // Clear out draft values
             this.draftValues = [];
             // Use refreshApex to update list view w/o refreshing the page
-            window.location.reload();
-            // return refreshApex(this.contact)
+            setTimeout(function() {
+                window.location.reload();
+            }, 2000);
+            //return refreshApex(this.recordsToDisplay)
         }).catch(error => {
             // On error show error message
             this.showToastMsg('Error Updating Case', error.body.message, error)
+
+        })
+    }
+
+    // Handles selecting a row and passing that cases Id
+    handleSelection(event) {
+        if(event.detail.selectedRows.length > 0) {
+            this.selectedRecord = event.detail.selectedRows[0].Id;
+        }
+    }
+
+    // Deletes the selected record
+    deleteRecord() {
+        deleteRecord(this.selectedRecord)
+        .then(() => {
+            this.showToastMsg('Success', 'Cases Deleted')
+            setTimeout(function() {
+                window.location.reload();
+            }, 2000);
+            //refreshApex(this.recordsToDisplay);
+        })
+        .catch(error => {
+            this.showToastMsg('Error Deleting Case', error.body.message, error)
 
         })
     }
@@ -83,4 +113,6 @@ export default class OppTable extends LightningElement {
             })
         )
     }
+
+    
 }
