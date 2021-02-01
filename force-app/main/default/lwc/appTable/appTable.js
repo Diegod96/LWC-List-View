@@ -120,6 +120,7 @@ export default class OppTable extends LightningElement {
 
     get options() {
         return [
+            {label: 'All', value: 'All'},
             {label: 'Low', value: 'Low'},
             {label: 'Medium', value: 'Medium'},
             {label: 'High', value: 'High'}
@@ -129,8 +130,13 @@ export default class OppTable extends LightningElement {
     
     handleChange(event) {
         this.selectedValue = event.target.value;
-        console.log('Selected Priority: ' + this.selectedValue);
-        this.filter();
+        //console.log('Selected Priority: ' + this.selectedValue);
+
+        if(this.selectedValue === 'All') {
+            this.recordsToDisplay = this.initialRecords;
+        } else {
+            this.filter();
+        }
     }
 
     filter() {
@@ -151,14 +157,14 @@ export default class OppTable extends LightningElement {
                 }
             }
 
-            console.log('Seleced records: ' + JSON.stringify(recs));
+            //console.log('Seleced records: ' + JSON.stringify(recs));
             this.opps = recs;
             this.recordsToDisplay = this.opps;
-            console.log('Records to display: ' + JSON.stringify(this.recordsToDisplay));
+            //console.log('Records to display: ' + JSON.stringify(this.recordsToDisplay));
         } else {
             this.opps = this.initialRecords;
             this.recordsToDisplay = this.opps;
-            console.log('Records to display: ' + JSON.stringify(this.recordsToDisplay));
+            //console.log('Records to display: ' + JSON.stringify(this.recordsToDisplay));
             
         }
     }
