@@ -1,10 +1,14 @@
 import { LightningElement, api, track} from 'lwc';
+import getCaseList from '@salesforce/apex/CasesController.getCaseList';
+
 
 const DELAY = 300;
 const recordsPerPage = [5,10,25,50,100];
 const pageNumber = 1;
 const showIt = 'visibility:visible';
 const hideIt = 'visibility:hidden'; //visibility keeps the component space, but display:none doesn't
+
+
 export default class Paginator extends LightningElement {
     @api showSearchBox = false; //Show/hide search box; valid values are true/false
     @api showPagination; //Show/hide pagination; valid values are true/false

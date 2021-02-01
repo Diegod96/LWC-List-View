@@ -17,14 +17,16 @@ const columns = [
 
 export default class OppTable extends LightningElement {
     
+    @track selectedValue; // Selected value in filter combobox
     @track selectedRecord; // Selected row record
     @track error;
     @track columns = columns; // Columns for the data table
-    @track opps; //All opportunities available for data table    
-    @track showTable = false; //Used to render table after we get the data from apex controller    
-    @track recordsToDisplay = []; //Records to be displayed on the page
-    @track rowNumberOffset; //Row number
-    draftValues = [];
+    @track opps; // All opportunities available for data table    
+    @track showTable = false; // Used to render table after we get the data from apex controller    
+    @track recordsToDisplay = []; // Records to be displayed on the page
+    @track rowNumberOffset; // Row number
+    draftValues = []; // Values to be saved on edit
+
 
     @wire(getCaseList)
     wopps({error,data}){
@@ -38,6 +40,8 @@ export default class OppTable extends LightningElement {
                 recs.push(opp);
             }
             this.opps = recs;
+            this.initialRecords = recs;
+            //console.log('Cases: '+ JSON.stringify(this.opps));
             this.showTable = true;
         }else{
             this.error = error;
@@ -114,5 +118,48 @@ export default class OppTable extends LightningElement {
         )
     }
 
+    get options() {
+        return [
+            {label: 'Low', value: 'Low'},
+            {label: 'Medium', value: 'Medium'},
+            {label: 'High', value: 'High'}
+        ]
+    }
     
+    
+    handleChange(event) {
+        this.selectedValue = event.target.value;
+        console.log('Selected Priority: ' + this.selectedValue);
+        this.filter();
+    }
+
+    filter() {
+        console.log('Filter method called');
+        if(this.selectedValue) {
+            this.opps = this.initialRecords;
+            //console.log('Initial Records: ' + JSON.stringify(this.initialRecords));
+        }
+
+        if(this.opps) {
+            let recs = [];
+            for (let rec of this.opps) {
+                //console.log('Record is: ' + JSON.stringify(rec));
+                //console.log('Records priority' + JSON.stringify(rec.Priority));
+
+                if(rec.Priority === this.selectedValue) {
+                    recs.push(rec);
+                }
+            }
+
+            console.log('Seleced records: ' + JSON.stringify(recs));
+            this.opps = recs;
+            this.recordsToDisplay = this.opps;
+            console.log('Records to display: ' + JSON.stringify(this.recordsToDisplay));
+        } else {
+            this.opps = this.initialRecords;
+            this.recordsToDisplay = this.opps;
+            console.log('Records to display: ' + JSON.stringify(this.recordsToDisplay));
+            
+        }
+    }
 }
