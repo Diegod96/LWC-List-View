@@ -118,6 +118,7 @@ export default class OppTable extends LightningElement {
         )
     }
 
+    // Case priority options
     get options() {
         return [
             {label: 'All', value: 'All'},
@@ -127,7 +128,9 @@ export default class OppTable extends LightningElement {
         ]
     }
     
-    
+    // Handle selected option value
+    // If the selected option value is 'All' then display all cases
+    // Else route to filter fnction to handle displaying cases by priority
     handleChange(event) {
         this.selectedValue = event.target.value;
         //console.log('Selected Priority: ' + this.selectedValue);
@@ -139,25 +142,30 @@ export default class OppTable extends LightningElement {
         }
     }
 
+    // Handles filtering datatable to show cases with selected priority
     filter() {
-        console.log('Filter method called');
+        //console.log('Filter method called');
         if(this.selectedValue) {
             this.opps = this.initialRecords;
             //console.log('Initial Records: ' + JSON.stringify(this.initialRecords));
         }
 
+        // Create empty array to store cases with selected priority
         if(this.opps) {
             let recs = [];
             for (let rec of this.opps) {
                 //console.log('Record is: ' + JSON.stringify(rec));
                 //console.log('Records priority' + JSON.stringify(rec.Priority));
 
+                // Add cases with selected priority to array of cases
                 if(rec.Priority === this.selectedValue) {
                     recs.push(rec);
                 }
             }
 
             //console.log('Seleced records: ' + JSON.stringify(recs));
+
+            // Assign the array of selected cases to recordsToDisplay to be used by the data table
             this.opps = recs;
             this.recordsToDisplay = this.opps;
             //console.log('Records to display: ' + JSON.stringify(this.recordsToDisplay));
