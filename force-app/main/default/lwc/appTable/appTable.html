@@ -3,24 +3,44 @@
         <template if:true={showTable}>
 
             <!--Pagination Component-->
-            <c-pagination records={opps} total-records={opps.length} show-search-box="true"
+            <c-pagination 
+                records={opps} 
+                total-records={opps.length} 
+                show-search-box="true"
                 onpaginatorchange={handlePaginatorChange}>
             </c-pagination>
 
             <!--Delete Case Button-->
-            <lightning-button slot="actions" label="Delete Case" onclick={deleteRecord}>
+            <lightning-button
+                variant="destructive-text" 
+                icon-name="utility:delete"
+                icon-position="right"
+                slot="actions"
+                label="Delete Case" 
+                onclick={deleteRecord}>
             </lightning-button>
 
             <!--Filter Combobox-->
             <div class="slds-box slds-theme--default">
-                <lightning-combobox name="filter" value={selectedValue} variant="label-hidden" options={options}
-                    onchange={handleChange} placeholder="Filter by Case Priority" style="color:grey;width:150px;"></lightning-combobox>
+                <lightning-combobox 
+                    name="filter" 
+                    value={selectedValue} 
+                    variant="label-hidden" 
+                    options={options}
+                    onchange={handleChange} 
+                    placeholder="Filter Priority" 
+                    style="color:grey;width:150px;"></lightning-combobox>
             </div>
 
 
             <!--Cases Datatable-->
-            <lightning-datatable key-field="Id" data={recordsToDisplay} columns={columns}
-                row-number-offset={rowNumberOffset} onrowselection={handleSelection} onsave={handleSave}
+            <lightning-datatable 
+                key-field="Id" 
+                data={recordsToDisplay} 
+                columns={columns}
+                row-number-offset={rowNumberOffset} 
+                onrowselection={handleSelection} 
+                onsave={handleSave}
                 draft-values={draftValues}>
             </lightning-datatable>
         </template>

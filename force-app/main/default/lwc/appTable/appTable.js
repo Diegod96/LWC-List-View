@@ -28,6 +28,7 @@ export default class OppTable extends LightningElement {
     draftValues = []; // Values to be saved on edit
 
 
+
     @wire(getCaseList)
     wopps({error,data}){
         if(data){
@@ -93,9 +94,10 @@ export default class OppTable extends LightningElement {
 
     // Deletes the selected record
     deleteRecord() {
+        console.log('Delete Record Method Called');
         deleteRecord(this.selectedRecord)
         .then(() => {
-            this.showToastMsg('Success', 'Cases Deleted')
+            this.showToastMsg('Success', 'Case(s) Deleted')
             setTimeout(function() {
                 window.location.reload();
             }, 2000);
